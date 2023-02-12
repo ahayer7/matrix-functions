@@ -1,0 +1,124 @@
+public class Matrix {
+
+	//create private instance variables
+	private int numRows;
+	private int numCols;
+	private double [][] data;
+	
+	//constructor method Matrix initializes the rows, columns, and data of the matrix
+	public Matrix (int r, int c) {
+		this.numRows = r;
+		this.numCols = c;
+		this.data = new double [r][c];
+		
+	}
+	
+	//constructor method Matrix initializes the rows, columns, and data of the matrix
+	public Matrix(int r, int c, double [] linArr) {
+		this.numRows = r;
+		this.numCols = c;
+		this.data = new double [r][c];
+		
+		//populate the array data with the elements in linArr
+		int x = 0;
+		for (int row = 0; row<r; row++) {
+			for(int col = 0; col<c; col++) {
+				this.data[row][col] = linArr[x];
+				x++;
+			}
+		}
+	}
+	//return the number of rows in the matrix
+	public int getNumRows() {
+		return numRows;
+	}
+	
+	//return the number of columns in the matrix
+	public int getNumCols() {
+		return numCols;
+	}
+	
+	//return the array containing the matrix data
+	public double [][] getData(){
+		return data;
+	}
+	
+	//return value of data at a specific row and column
+	public double getElement(int r, int c) {
+		return data[r][c];
+	}
+	
+	//set value of data at a specific row and column
+	public void setElement(int r, int c, double value) {
+		data [r][c] = value;
+	}
+	
+	//method transposes the matrix
+	public void transpose() {
+		double[][] tranMatrix = new double[numCols][numRows];
+	    
+		//copy the row of this matrix into the new transposed matrix's column
+		//copy the column of this matrix into the new transposed matrix's row
+	    for (int row = 0; row < numRows; row++) {
+	        for (int col = 0; col < numCols; col++) {
+	            tranMatrix[col][row] = data[row][col];
+	        }
+	    }
+	    //update the row and column values to reflect the transposing
+        this.data = tranMatrix;
+        int swapRow = numRows;
+        int swapCols = numCols;
+        numRows = swapCols;
+        numCols = swapRow;
+	}
+	
+	//method multiplies the matrix with a scalar value
+	public Matrix multiply (double scalar) {
+		Matrix multMatrix = new Matrix(numRows, numCols);
+		//go through this matrix and return a new matrix who's every element has been multiplied by the scalar
+		for (int row = 0; row < numRows; row++) {
+	        for (int col = 0; col < numCols; col++) {
+	            multMatrix.data[row][col] = this.data[row][col]*scalar;
+	        }
+		} 
+		return multMatrix;
+	}
+	
+	//method multiplies the matrix with another matrix
+	public Matrix multiply(Matrix other) {
+		//check this condition to see if matrix multiplication can be done
+		if (this.numCols != other.numRows) {
+			return null;
+		}
+		//go through this matrix and return a new matrix who's every element has been multiplied by the elements of the every matrix
+		Matrix multMatrix = new Matrix(this.numRows,other.numCols);
+		for (int row = 0; row < this.numRows; row++) {
+	        for (int col = 0; col < this.numCols; col++) {
+	        	for (int i = 0; i< other.numRows; i++) {
+	        		multMatrix.data[row][col] = multMatrix.data[row][col] + data[row][i]*other.data[i][col];
+	        	}
+
+	        }
+		}	
+	 return multMatrix;	
+	}
+	
+	//method returns the data in a matrix shape 
+	public String toString() {
+		//check is the matrix is empty
+		if (data.length == 0) {
+			return ("Empty matrix");
+		}
+		//return the matrix in a table format, taking up 8 spaces per value with 3 sig figs
+		String printmatrix = ("");
+			for (int row = 0; row < numRows; row++) {
+		        for (int col = 0; col < numCols; col++) {
+		        	printmatrix = printmatrix + String.format("%8.3f", data[row][col]);
+		        }
+		        printmatrix = printmatrix + "\n";
+		}
+	return printmatrix;
+	
+	} 
+		
+}
